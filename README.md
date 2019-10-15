@@ -1,12 +1,12 @@
 ---
-title: 移动端ReactNative技术架构介绍
+title: 移动端ReactNative介绍
 sidebar: auto
 ---
 
 <!-- ![rn](https://img-blog.csdn.net/20151001111315780) 显示图片链接-->
 <!-- 基本语法网站 https://shd101wyy.github.io/markdown-preview-enhanced/#/zh-cn/markdown-basics?id=%E9%93%BE%E6%8E%A5 -->
 
-# 移动端ReactNative技术架构介绍
+# 移动端ReactNative介绍
 ## ReactNative的介绍
 React Native 让开发者使用 JavaScript 和 React 编写应用，利用相同的核心代码就可以创建 iOS 和 Android 跨平台的原生应用，React Native 的宗旨是，学习一次，高效编写跨平台原生应用。[ReactNative官网](https://facebook.github.io/react-native/)
 
@@ -16,8 +16,6 @@ React Native 让开发者使用 JavaScript 和 React 编写应用，利用相同
 - [CSS3](http://www.w3school.com.cn/css3/)
 - [React](https://reactjs.org/)
 - [ReactNative](https://facebook.github.io/react-native/)
-- [Redux](https://redux.js.org/)
-- [Dva](https://dvajs.com/)
 
 ## 开发需要安装的工具
 - [JDK的相关配置](https://www.cnblogs.com/smyhvae/p/3788534.html)
@@ -64,13 +62,13 @@ React Native 让开发者使用 JavaScript 和 React 编写应用，利用相同
 
 3. 创建ReactNative工程
 
-`react-native init AwesomeProject`
+`react-native init react-native-demo`
 
-指定具体版本：`react-native init AwesomeProject --version 0.55.4`
+指定具体版本：`react-native init react-native-demo --version 0.55.4`
 
 4. 进入创建工程的文件夹下
 
-`cd AwesomeProject`
+`cd react-native-demo`
 
 5. 手机连接电脑，执行下面的命令安装应用到手机
 
@@ -101,289 +99,63 @@ package.json里面放的是我们工程所用到的一些依赖，如果之后�
 
 我们的主要编码工作在这个文件夹下面
 
-- `component`封装的公共组件
-- `model`处理UI页面的业务逻辑，UUI页面可以通过发送action给model来处理请求然后把结果通过更新state状态值来更新页面。 
-- `pages`UI页面
-  - `login` 登录
-  - `main-tabs` 主页面
-  - `其他...` 
-- `res`配置公共样式和国际化的文件
-- `router`页面路由的相关文件
-- `services`APP做服务请求的相关代码
-- `utils`一些公用的工具方法
+#### demo工程会用到的一些依赖介绍
 
-#### 工程会用到的一些依赖介绍
+- [react-native-swiper](https://github.com/leecade/react-native-swiper)
 
-- [dva-core](https://dvajs.com/)
+`react-native-swiper是一个滑动轮播组件`
 
-`dva 是基于 redux 最佳实践 实现的 framework，简化使用 redux 和 redux-saga 时很多繁杂的操作`
-
-- [react-native-device-info](https://github.com/rebeccahughes/react-native-device-info)
-
-`用来获取设备相关信息`
-
-- [react-navigation](https://reactnavigation.org/)
+- [react-navigation](https://reactnavigation.org/docs/en/getting-started.html/)
 
 `页面导航的使用`
-
-- [react-native-vector-icons图标](https://oblador.github.io/react-native-vector-icons/) [git地址](https://oblador.github.io/react-native-vector-icons/)
-
-`图标的使用`
-
-- [PropType](https://github.com/facebook/prop-types)
-
-`对react组件中props对象中的变量进行类型检测`
 
 
 ## 代码说明
 
 #### 工程Git地址
-`git@git.cs2025.com:apps/rn-project.git`
+`https://github.com/fenglipk/react-native-demo.git`
 
-#### 入口文件
+#### 工程基础配置
 
-入口文件基本都配置好了，下面做一些大致的说明
-
-APP.js是入口文件，代码里面加载的是AppContent，他的里面是一个路由Router
+自己动手从头开始安装插件
 
 ```javascript
-const app = dva({
-  initialState: {}, // 配置一些初始化的state值
-  models: [...Models], // 把model放入dva进行管理
-  extraReducers: { router: routerReducer }, // 把导航路由交给redux管理，简单说就是配置了这里就可以在model里面通过dispatch进行页面跳转
-  onAction: [createLogger(), routerMiddleware], // 在此放置路由中间件，和routerReducer配套使用
-  onError(e) { // 打印全局错误日志
-    console.log('onError', e);
-  },
-});
+react-native init react-native-demo
 
-const App = app.start(<AppContent />); // 根视图
+cd react-native-demo
 
-registerAppStore(app._store);
+yarn 或者 npm install
 
-export default App;
+yarn add react-navigation
+
+yarn add react-native-reanimated  
+yarn add react-native-gesture-handler
+yarn add react-native-screens@^1.0.0-alpha.23
+
+react-native link react-native-reanimated
+react-native link react-native-gesture-handler
+react-native link react-native-screens
+
+yarn add react-navigation-stack
+
+yarn add react-native-swiper@nightly
+
+react-native run-android
 ```
-
-AppContent里面是一个路由Router,Router里面加载是一个导航AppNavigator
-
-```javascript
-// 创建导航页面
-const AppNavigator = createStackNavigator(
-  // 导航里面的页面，其中页面也可以是一个导航比如这里的MainNavigator，我们之后主要的业务是在Main页面上进行拓展
-  {
-    Main: { screen: MainNavigator },
-    Login: { screen: Login },
-  },
-  {
-    initialRouteName: 'Main', // 设置初始加载页面
-    headerMode: 'none',
-    mode: 'modal',
-    navigationOptions: {
-      gesturesEnabled: false,
-    },
-   ...
-  },
-);
-
-// 下面两步是把routerReducer和routerMiddleware配置给APP.js文件的dva实现对路由的管理，实现在model和组件里面能够使用NavigationActions.navigate()进行页面跳转等
-
-// 创建导航的路由Reducer给redux管理
-export const routerReducer = createNavigationReducer(AppNavigator);
-
-// 创建导航中间件并把路由交给state
-export const routerMiddleware = createReactNavigationReduxMiddleware(
-  'root',
-  state => state.router,
-);
-
-// 把导航绑定在root上
-const Root = reduxifyNavigator(AppNavigator, 'root');
-
-// 获取路由的名称
-const getActiveRouteName = (navigationState) => {
-  if (!navigationState) {
-    return null;
-  }
-  const route = navigationState.routes[navigationState.index];
-  if (route.routes) {
-    return getActiveRouteName(route);
-  }
-  return route.routeName;
-};
-
-// 返回给App.js的Router
-@connect(({ app, router }) => ({ app, router }))
-class Router extends PureComponent {
-  componentWillMount() { // 绑定退回按钮事件
-    BackHandler.addEventListener('hardwareBackPress', this.backHandle);
-  }
-
-  componentWillUnmount() { // 取消绑定退回按钮事件
-    BackHandler.removeEventListener('hardwareBackPress', this.backHandle);
-  }
-
-  // 定义那些页面可以返回
-  backHandle = () => {
-    const currentScreen = getActiveRouteName(this.props.router);
-    if (currentScreen === 'Login') {
-      return true;
-    }
-    if (currentScreen !== 'Main') {
-      this.props.dispatch(NavigationActions.back());
-      return true;
-    }
-    return false;
-  }
-
-  render() {
-    const { app, dispatch, router } = this.props;
-    if (app.loading) return <Loading />;
-
-    return <Root dispatch={dispatch} state={router} />;
-  }
-}
-
-export default Router;
-```
-
-#### 示例 登录页面
-
-下面用登录部分对如何创建一个页面进行说明
-
-一般步骤 `1.新建一个component展示UI页面` `2.新建model处理UI页面的业务逻辑` `3.把component注册到导航里面` `4.如果涉及到网络请求的话再新建一个service处理网络请求`
-
-- 新建一个component展示UI页面，比如Pages/login文件夹下面的index.js为登录的UI页面
+从demo工程初始化和插件的安装
 
 ```javascript
-@connect(({ auth }) => ({ // 把models里面的auth和LoginPage对应起来
-  auth,
-}))
-class LoginPage extends Component {
-  @Debounce(400, {
-    leading: true,
-    trailing: false,
-  })
-  onLogin() { // 处理登录请求 发送action给auth进行处理
-    this.props.dispatch(createAction('auth/login')({
-      username: '170132',
-      password: 'e10adc3949ba59abbe56e057f20f883e',
-    }));
-  }
+git clone https://github.com/fenglipk/react-native-demo.git
 
-  _onLogin = () => {
-    this.onLogin();
-  }
+cd react-native-demo
 
-  // UI页面
-  render() {
-    return (
-      <View flex paddingH-25 paddingT-120>
-        <Text blue50 text20>Welcome</Text>
-        <TextInput text50 placeholder="用户名" dark10 />
-        <TextInput text50 placeholder="密码" secureTextEntry dark10 />
-        <View marginT-100 center>
-          <Button text70 white background-orange30 label="登陆" onPress={this._onLogin} />
-          <Button link text70 orange30 label="注册" marginT-20 />
-        </View>
-      </View>
-    );
-  }
-}
+yarn 或者 npm install
 
-export default LoginPage;
-```
-- 新建model处理UI页面的业务逻辑，比如models文件夹下面处理登录请求的auth.js
+react-native link react-native-reanimated
+react-native link react-native-gesture-handler
+react-native link react-native-screens
 
-```javascript
-export default {
-  namespace: 'auth', // 创建model的命名空间
-  state: { // 给model里面的state初始化一些自定义的属性
-    login: false, // 判断是否登录成功
-    loading: false, // 是否正在加载loading
-    fetching: false, // 是否正在请求
-  },
-  reducers: { // 只能通过这里更新state状态值刷新登录页面
-    updateState(state, { payload }) {
-      return { ...state, ...payload };
-    },
-  },
-  effects: {
-    * loadStorage(_, { call, put }) { // 检查是否登录过，没有登录跳转到登录页面
-      const login = yield call(Storage.get, 'login', false) || false;
-      yield put(createAction('updateState')({ login, loading: false }));
-      if (!login) {
-        yield put(NavigationActions.navigate({ routeName: 'Login' }));
-      }
-    },
-    * login({ payload }, { put, call }) { // 发送登录请求
-      yield put(createAction('updateState')({ fetching: true }));//更新fetch状态，表示开始处理登录请求
-      const token = yield call(authService.login, payload);//发送登录请求给后台验证
-      let login = false;
-      // 根据登录结果 判断返回主页面还是提醒请求失败
-      if (token && token.access) { // 登录成功
-        yield put(NavigationActions.back()); // 这里之所以是back 是因为我们的根页面是Main，login是覆盖在上面的
-        yield put(createAction('updateState')({ token }));
-        login = true;
-        global.__TOKEN_ACCESS__ = token.access;
-        yield call(Storage.set, 'token.access', token.access);
-      } else { // 登录失败
-        noticeByAlert(I18n.t('optionsError').replace('$', I18n.t('page.account.login')), I18n.t('pleseCheckAuth'));
-      }
-      yield put(createAction('updateState')({ login, fetching: false })); //表示请求完成
-      yield call(Storage.set, 'login', login);
-    },
-    * logout(_, { call, put }) { // 注销跳转到登录页面
-      yield call(Storage.set, 'login', false);
-      yield put(createAction('updateState')({ login: false }));
-      yield put(NavigationActions.navigate({ routeName: 'Login' }));
-    },
-  },
-  subscriptions: {
-    setup({ dispatch }) { // 这里的方法会在app最初运行的时候被调用，这里表示发送请求给loadStorage方法判断是否登录过，是则显示主页面，没有则跳转到登录页面
-      dispatch({ type: 'loadStorage' });
-    },
-  },
-
-};
-```
-
-- 把component注册到导航里面
-
-```javascript
-const AppNavigator = createStackNavigator(
-  // 导航里面的页面，其中页面也可以是一个导航比如这里的MainNavigator
-  {
-    Main: { screen: MainNavigator },
-    Login: { screen: Login }, //注册登录页
-  },
-  ...
-);
-```
-
-- 涉及网络请求的话再新建一个service处理网络请求，比如处理登录请求的Servers文件夹下面的auth.js
-
-```javascript
-const AuthCode = {
-  clientAppId: 'APP_MES',
-  securityCode: '',
-};
-
-export const login = async params => {
-  const defaultParams = AuthCode;
-  const newParams = { ...defaultParams, ...params }; // 把请求参数和默认的参数进行集合
-  return request(`${bashUrl}/login`, { //发送请求给后台
-    method: 'POST',
-    body: newParams,
-  }).then(mapToken); // 处理返回数据
-};
-
-const mapToken = response => {
-  const token = {
-    access: response.access_token,
-    refresh: response.refresh_token,
-  };
-  return token;
-};
+react-native run-android
 ```
 
 ## 调试工具
@@ -392,15 +164,8 @@ const mapToken = response => {
 
 ![An image](./images/start_react.png)
 
-手机连接电脑，我们打开androidStudio 导入我们工程目录下面的 android工程 ，选中app,点击三角型按钮安装app到手机
 
-![An image](./images/as1.png)
-
-安装成功手机显示如下图
-
-![An image](./images/main.png)
-
-摇一摇手机 会弹出 Developer Menu对话框 这里面有我们开发时候会用到的一些调试工具
+摇一摇手机 会弹出 Developer Menu对话框 这里面有我们开发时候会用到的一些调试工具 （模拟器是 ctrl + m）
 
 ![An image](./images/dev_tool.png)
 
