@@ -56,8 +56,7 @@ React Native 让开发者使用 JavaScript 和 React 编写应用，利用相同
 
 `npm install -g react-native-cli`
 
-2. 可以安装yarn来替换npm的命令
-
+2. 可以安装[yarn](https://blog.csdn.net/yw00yw/article/details/81354533)来替换npm的命令
 `npm install -g yarn`
 
 3. 创建ReactNative工程
