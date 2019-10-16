@@ -181,11 +181,8 @@ react-native run-android
 #### Debug JS Remotely  
 
 该功能可以通过浏览器调试APP代码,类似google浏览器的调试工具的使用
-1. 安装react-devtools，右击鼠标 打开git bash命令窗口 输入 npm install -g react-devtools 进行安装
 
-2. google浏览器调试会有跨域的问题，我是安装跨域的插件allow-control-allow-origin来解决的
-
-3. 以上两步完成后点击Debug JS Remotely，此时会弹出浏览器调试页面，能看到工程的代码目录表示浏览器调试工具启动成功
+点击Debug JS Remotely，此时会弹出浏览器调试页面，把地址换成http://localhost:8081/debugger-ui/能看到工程的代码目录表示浏览器调试工具启动成功
 
 ![An image](./images/dev_tool1.png)
 
