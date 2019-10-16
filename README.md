@@ -181,11 +181,8 @@ react-native run-android
 #### Debug JS Remotely  
 
 该功能可以通过浏览器调试APP代码,类似google浏览器的调试工具的使用
-1. 安装react-devtools，右击鼠标 打开git bash命令窗口 输入 npm install -g react-devtools 进行安装
 
-2. google浏览器调试会有跨域的问题，我是安装跨域的插件allow-control-allow-origin来解决的
-
-3. 以上两步完成后点击Debug JS Remotely，此时会弹出浏览器调试页面，能看到工程的代码目录表示浏览器调试工具启动成功
+点击Debug JS Remotely，此时会弹出浏览器调试页面，输入 http://localhost:8081/debugger-ui/ 再次reload 能看到工程的代码目录表示浏览器调试工具启动成功
 
 ![An image](./images/dev_tool1.png)
 
@@ -224,22 +221,5 @@ react-native run-android
 
 <!-- #### start/stop Sampling Profiler -->
 
-#### react-devtools 的使用
-1. 安装react-devtools的命令 npm install -g react-devtools
-
-2. 打开命令输入行 执行 react-devtools 弹出如下窗口说明安装成功
-
-![An image](./images/tool1.png) 
-
-3. 摇一摇手机，选择Toggle Inspector 选中inpect后 点击屏幕的页面元素，该调试工具会定位到元素代码的位置，开发人员可以查看相关元素的信息
-
-![An image](./images/tool3.png)
-
-![An image](./images/tool2.png)  
-4. 和步骤三相反，鼠标移动到调试工具的某个页面元素，手机对应的元素也会高亮显示
-
-![An image](./images/tool2.png) 
-
-![An image](./images/tool3.png)
 
 
